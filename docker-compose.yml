@@ -8,7 +8,6 @@ services:
       - "9090:9090"
     volumes:
       - /var/images:/var/images
-    command: air
     depends_on:
       - postgres
 
