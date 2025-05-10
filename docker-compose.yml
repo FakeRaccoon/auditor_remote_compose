@@ -1,0 +1,39 @@
+version: '2.30.3'
+
+services:
+  go:
+    image: fakeraccoon/auditor_go:latest
+    container_name: auditor_go
+    ports:
+      - "9090:9090"
+    volumes:
+      - /var/images:/var/images
+    command: air
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:alpine
+    container_name: auditor_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PORT: ${DB_PORT}
+      TZ: Asia/Jakarta
+      PGTZ: Asia/Jakarta
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  adminer:
+    image: adminer
+    container_name: auditor_adminer
+    ports:
+      - "6060:8080"
+
+volumes:
+  postgres_data:
+  images:
